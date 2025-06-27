@@ -661,6 +661,13 @@ class AccountsController(TransactionBase):
 					break
 
 	def calculate_taxes_and_totals(self):
+		for item in self.get("items"):
+			if item.weight_per_unit and item.qty:
+				item.total_weight = item.weight_per_unit * item.qty
+
+			if not self.get("items"):
+				self.init_internal_values()
+				return
 		from erpnext.controllers.taxes_and_totals import calculate_taxes_and_totals
 
 		calculate_taxes_and_totals(self)
